@@ -2,10 +2,14 @@ require_relative 'contact'
 
 class CRM
 
-
-
   def initialize(name)
     @name = name
+  end
+
+  def self.create(name)
+    a_crm_app = self.new(name)
+    a_crm_app.main_menu
+    return a_crm_app
   end
 
   def main_menu
@@ -59,12 +63,30 @@ class CRM
   end
 
   def modify_existing_contact
-    print 'Search contact by first_name, last_name or email'
-    self.search(search_first_name, search_last_name, search_email)
 
+    if Contact.printContacts.nil?
+      return
+    else
+      puts 'Enter an id for the contact to be modified: '
+      id = gets.chomp
+      # puts "sending id #{id} to find "
+      this_contact = Contact.find(id.to_i)
 
+      Contact.printContact(this_contact)
+      puts "Please enter the attribute you want to modify \n"
+      # if user enters First Name it will lowercase and underscore to first_name
+      attribute = gets.chomp.downcase.tr(" ","_")
 
+      puts "Please enter the value you want to assign to attribute #{attribute}"
+      value = gets.chomp
 
+      # puts "sending update #{attribute}, #{value}"
+      this_contact.update(attribute, value)
+
+      puts "Contact details updated as follows"
+      Contact.printContact(this_contact)
+
+    end
   end
 
   def delete_contact
@@ -87,7 +109,7 @@ class CRM
     puts "put in the value you are looking for"
     value = gets.chomp
     result = Contact.find_by(attribute, value)
-    puts result
+    Contact.printContact(result)
 
   end
 

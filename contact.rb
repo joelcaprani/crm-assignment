@@ -13,8 +13,6 @@ class Contact
     @email =email
     @note = note
 
-
-    # increment the next unique ID
     @@next_id += 1
   end
 
@@ -22,18 +20,11 @@ class Contact
   # store the newly created contact, and then return it
 
   def self.create(first_name, last_name, email, note)
-    # 1. Initialize a new Contact with a unique ID
+
     new_contact = self.new(first_name, last_name, email, note)
-
-
-    # 2. Add the new Contact to the list of all contacts
     @@contacts << new_contact
-
-    # 3. increment the next unique ID
-    #  @@next_id += 1
-
-    # 4. Return the newly created Contact
     return  new_contact
+
   end
 
   # This method should return all of the existing contacts
@@ -44,11 +35,16 @@ class Contact
   # This method should accept an id as an argument
   # and return the contact who has that id
   def self.find(id)
+
     @@contacts.each do |contact|
+      # puts "comparing contact id #{contact.id} and id #{id}"
       if contact.id == id
         return contact
       end
     end
+    #will return nil instead of array if no match found
+    puts "NO CONTACT FOUND!! \n\n"
+
   end
 
   # This method should allow you to specify
@@ -58,13 +54,13 @@ class Contact
   def update(attribute, new_value)
 
     case attribute
-    when :first_name
+    when "first_name"
       self.first_name = new_value
-    when :last_name
+    when "last_name"
       self.last_name = new_value
-    when :email
+    when "email"
       self.email = new_value
-    when :note
+    when "note"
       self.note = new_value
     end
 
@@ -75,12 +71,13 @@ class Contact
   # by specifying both the name of the attribute and the value
   # eg. searching for 'first_name', 'Betty' should return the first contact named Betty
   def self.find_by(attribute, value)
+    # puts "looking for attr #{attribute} and value #{value}"
     temp_contact = nil
     @@contacts.each do |contact|
-      temp_contact = contact if attribute == :first_name && contact.first_name == value
-      temp_contact = contact if attribute == :last_name && contact.last_name == value
-      temp_contact = contact if attribute == :email && contact.email == value
-      temp_contact = contact if attribute == :note && contact.note == value
+      temp_contact = contact if attribute == "first_name" && contact.first_name == value
+      temp_contact = contact if attribute == "last_name" && contact.last_name == value
+      temp_contact = contact if attribute == "email" && contact.email == value
+      temp_contact = contact if attribute == "note" && contact.note == value
     end
     return temp_contact
   end
@@ -102,20 +99,24 @@ class Contact
     puts "contact deleted"
   end
 
-  # Feel free to add other methods here, if you need them.
-  def self.search(search_first_name, search_last_name, search_email)
-
-    search_results = []
-   @@contacts.each do |contact|
-      if contact.first_name == search_first_name && contact.last_name == search_last_name && contact.email == search_email ||
-         contact.first_name == search_first_name && contact.last_name == search_last_name ||
-         contact.first_name == search_first_name && contact.email == search_email ||
-         contact.last_name == search_last_name && contact.email == search_email
-         search_results << contact
-        end
+  def self.printContacts
+    if @@contacts.count > 0
+      puts "Found Contact(s) with the following attributes and values"
+      @@contacts.each do |contact|
+        self.printContact(contact)
       end
-    return search_results
+    else
+      puts "No contacts to modify \n\n"
+    end
+  end
 
+  def self.printContact(contact)
+    puts "ID: \t\t #{contact.id}"
+    puts "First Name: \t\t #{contact.first_name}"
+    puts "Last Name: \t\t #{contact.last_name}"
+    puts "Email: \t\t #{contact.email}"
+    puts "Note:\t\t  #{contact.note}"
+    puts "\n\n======================================\n\n"
   end
 
 end
